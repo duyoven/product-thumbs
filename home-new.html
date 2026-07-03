@@ -54,6 +54,39 @@
  </div>
 </section>
 
+<!-- KHUYẾN MÃI (động — tự nạp từ chuyên mục Khuyến mãi, không có bài thì tự ẩn) -->
+<section class="alt" id="khuyen-mai" style="display:none">
+ <div class="wrap">
+  <div style="display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin-bottom:24px">
+   <div><div class="kick">Khuyến mãi · Tin mới</div><h2 class="dt">Đang diễn ra tại <span class="em">Duy's Oven</span></h2></div>
+   <a class="btn ghost pill" href="https://duyoven.com/category/khuyen-mai/">Xem tất cả khuyến mãi →</a>
+  </div>
+  <div id="dvh-km-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:18px"></div>
+ </div>
+</section>
+<script>
+(function(){
+ function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+ function strip(s){var d=document.createElement('div');d.innerHTML=s||'';return (d.textContent||'').trim();}
+ fetch('/wp-json/wp/v2/posts?categories=262&per_page=3&_embed=wp:featuredmedia&_fields=link,title,excerpt,date,_links,_embedded')
+ .then(function(r){return r.ok?r.json():[];})
+ .then(function(posts){
+  if(!posts||!posts.length) return;
+  var grid=document.getElementById('dvh-km-grid');
+  posts.forEach(function(p){
+   var img='';
+   try{var m=p._embedded['wp:featuredmedia'][0];var s=(m.media_details&&m.media_details.sizes);var u=(s&&(s.medium_large||s.large||s.medium)?(s.medium_large||s.large||s.medium).source_url:m.source_url);if(u)img='<div style="aspect-ratio:16/9;overflow:hidden"><img src="'+u+'" alt="'+esc(strip(p.title.rendered))+'" style="width:100%;height:100%;object-fit:cover" loading="lazy"></div>';}catch(e){}
+   var d=new Date(p.date);var dstr=('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear();
+   var ex=strip(p.excerpt.rendered);if(ex.length>140)ex=ex.slice(0,140)+'…';
+   var a=document.createElement('a');a.className='card';a.href=p.link;a.style.cssText='text-decoration:none;overflow:hidden;display:block';
+   a.innerHTML=img+'<div style="padding:20px 22px"><div style="color:#F47B20;font-size:12.5px;font-weight:600;margin-bottom:8px">'+dstr+'</div><h3 style="font-family:\'Oswald\',sans-serif;font-size:19px;line-height:1.3;text-transform:uppercase">'+p.title.rendered+'</h3><p style="color:rgba(245,243,239,.62);font-size:14px;margin:10px 0;line-height:1.65">'+esc(ex)+'</p><span style="color:#F47B20;font-size:14px;font-weight:600">Xem chi tiết →</span></div>';
+   grid.appendChild(a);
+  });
+  document.getElementById('khuyen-mai').style.display='';
+ }).catch(function(){});
+})();
+</script>
+
 <!-- USP 3 TRỤ CỘT -->
 <section>
  <div class="wrap">
