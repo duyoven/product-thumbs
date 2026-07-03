@@ -59,7 +59,7 @@
  <div class="wrap">
   <div style="display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin-bottom:24px">
    <div><div class="kick">Khuyến mãi · Tin mới</div><h2 class="dt">Đang diễn ra tại <span class="em">Duy's Oven</span></h2></div>
-   <a class="btn ghost pill" href="https://duyoven.com/khuyen-mai/">Xem tất cả khuyến mãi →</a>
+   <a class="btn ghost pill" href="https://duyoven.com/blog/">Xem tất cả tin →</a>
   </div>
   <div id="dvh-km-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:18px"></div>
  </div>
@@ -68,7 +68,7 @@
 (function(){
  function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
  function strip(s){var d=document.createElement('div');d.innerHTML=s||'';return (d.textContent||'').trim();}
- fetch('/wp-json/wp/v2/posts?categories=262&per_page=3&_embed=wp:featuredmedia&_fields=link,title,excerpt,date,_links,_embedded')
+ fetch('/wp-json/wp/v2/posts?categories=262,263&per_page=3&_embed=wp:featuredmedia&_fields=link,title,excerpt,date,_links,_embedded')
  .then(function(r){return r.ok?r.json():[];})
  .then(function(posts){
   if(!posts||!posts.length) return;
