@@ -1,0 +1,83 @@
+<!-- Snippet #47: mega menu "Sản phẩm" đồng bộ từ duyoven.vn/menu-sp.json (nguồn chuẩn duy nhất).
+     Thêm sản phẩm mới: chỉ sửa mega menu .vn + chạy scripts/gen-menu-sp.py — .com tự theo. -->
+<style data-no-optimize="1">
+#dov-spmega{display:none;position:fixed;left:50%;transform:translateX(-50%);width:min(1240px,96vw);
+  background:#100d0a;border:1px solid #2b2418;border-top:0;border-radius:0 0 16px 16px;
+  box-shadow:0 24px 60px rgba(0,0,0,.6);padding:26px 30px 22px;z-index:99990;
+  grid-template-columns:repeat(5,minmax(0,1fr));gap:8px 26px;max-height:calc(100vh - 150px);overflow:auto}
+#dov-spmega.on{display:grid}
+#dov-spmega .dov-h{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#f4661f;margin:0 0 10px;font-weight:600}
+#dov-spmega .dov-sub{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#f4661f;opacity:.9;margin:10px 0 4px}
+#dov-spmega a.dov-it{display:flex;align-items:center;gap:11px;padding:5px 0;color:#ece5d8;font-size:13.5px;line-height:1.35;text-decoration:none}
+#dov-spmega a.dov-it:hover{color:#ff9a5a}
+#dov-spmega a.dov-it img{width:42px;height:42px;flex:none;object-fit:cover;border-radius:8px;background:#fff;padding:2px}
+#dov-spmega a.dov-all{display:inline-block;margin-top:10px;color:#f4661f;font-size:13px;text-decoration:none}
+#dov-spmega a.dov-all:hover{color:#ff9a5a}
+@media(max-width:1024px){#dov-spmega{display:none!important}}
+@media(min-width:1025px){li.dov-spm-li ul.sub-menu{display:none!important}}
+</style>
+<script data-no-optimize="1" data-no-defer="1" data-cfasync="false">
+(function(){
+  if(window.__dovSpMega) return; window.__dovSpMega=1;
+  var mq=window.matchMedia('(min-width:1025px)');
+  var li=null, panel=null, timer=null;
+
+  function findLi(){
+    var as=document.querySelectorAll('.header-menu-container a');
+    for(var i=0;i<as.length;i++){
+      var h=as[i].getAttribute('href')||'';
+      if(/\/san-pham\/?$/.test(h)){
+        var l=as[i].closest('li');
+        if(l && l.querySelector('ul.sub-menu')) return l;
+      }
+    }
+    return null;
+  }
+  function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+  function url(it){ if(it.com) return it.com; var v=it.vn||''; return /^https?:/.test(v)?v:'https://duyoven.vn/'+v; }
+  function linkHtml(it){
+    var im=it.img?'<img src="'+it.img+'" loading="lazy" alt="">':'';
+    return '<a class="'+(it.all?'dov-all':'dov-it')+'" href="'+url(it)+'">'+im+esc(it.t)+'</a>';
+  }
+  function build(data){
+    panel=document.createElement('div'); panel.id='dov-spmega';
+    var html='';
+    (data.cols||[]).forEach(function(c){
+      html+='<div class="dov-col">'+(c.h?'<div class="dov-h">'+esc(c.h)+'</div>':'');
+      (c.items||[]).forEach(function(x){
+        if(x.sub!==undefined){
+          html+='<div class="dov-sub">'+esc(x.sub)+'</div>';
+          (x.items||[]).forEach(function(y){ html+=linkHtml(y); });
+        } else html+=linkHtml(x);
+      });
+      html+='</div>';
+    });
+    panel.innerHTML=html;
+    document.body.appendChild(panel);
+    panel.addEventListener('mouseenter',function(){clearTimeout(timer);});
+    panel.addEventListener('mouseleave',hideSoon);
+  }
+  function show(){
+    if(!panel||!mq.matches) return; clearTimeout(timer);
+    var hd=document.querySelector('.site-header, header');
+    panel.style.top=(hd?Math.max(0,hd.getBoundingClientRect().bottom):64)+'px';
+    panel.classList.add('on');
+  }
+  function hideSoon(){ clearTimeout(timer); timer=setTimeout(function(){ if(panel) panel.classList.remove('on'); },200); }
+  function init(){
+    li=findLi(); if(!li) return;
+    fetch('https://duyoven.vn/menu-sp.json')
+      .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(d){
+        build(d);
+        li.classList.add('dov-spm-li');   /* chỉ giấu menu cũ KHI menu mới đã dựng xong */
+        li.addEventListener('mouseenter',show);
+        li.addEventListener('mouseleave',hideSoon);
+        document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&panel) panel.classList.remove('on'); });
+        window.addEventListener('resize',function(){ if(!mq.matches&&panel) panel.classList.remove('on'); });
+      })
+      .catch(function(){ /* lỗi mạng: giữ nguyên menu cũ, không phá gì */ });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+</script>
