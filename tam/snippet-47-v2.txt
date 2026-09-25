@@ -106,6 +106,7 @@ html[lang="th"] .dov-mpanel .mega-col[data-kieu="cao-cap"] h4::after{content:"à¸
 #dov-drawer .dv-mega .mega-con a{padding:5px 10px!important;font-size:12.5px!important}
 #dov-drawer .dv-mega .mega-col[data-kieu="cao-cap"]{margin:12px 0 4px!important}
 #dov-drawer .dv-mega a{padding-left:10px!important;padding-right:10px!important}
+#dov-spmega [data-kieu="cao-cap"] h4::after,.dov-mpanel .mega-col[data-kieu="cao-cap"] h4::after{display:inline-block;white-space:nowrap}
 .dov-mpanel .mega-con a:active{background:#f4661f!important;color:#140f0b!important}
 </style>
 <script data-no-optimize="1" data-no-defer="1" data-cfasync="false">
