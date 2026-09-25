@@ -133,8 +133,8 @@ html[lang="th"] .dov-mpanel .mega-col[data-kieu="cao-cap"] h4::after{content:"�
   function url(it){ if(it.com) return it.com; var v=it.vn||''; return /^https?:/.test(v)?v:VN+'/'+v.replace(/^\//,''); }
   function img(src,cls){ if(!src) return null; var i=document.createElement('img'); i.src=/^https?:/.test(src)?src:VN+src; i.loading='lazy'; i.alt=''; i.className=cls||'mega-thumb'; return i; }
   /* chu 5 tieng: gan data-vi/data-xx, doi theo <html lang> */
-  function chu(el,vi,tr){ el.setAttribute('data-vi',vi); if(tr) for(var k in tr){ if(tr[k]) el.setAttribute('data-'+k,tr[k]); } el.textContent=(L()!=='vi'&&tr&&tr[L()])||vi; return el; }
-  function doiTieng(root){ var l=L(); root.querySelectorAll('[data-vi]').forEach(function(e){ e.textContent=(l!=='vi'&&e.getAttribute('data-'+l))||e.getAttribute('data-vi'); }); }
+  function chu(el,vi,tr){ el.setAttribute('data-vi',vi); if(tr) for(var k in tr){ if(tr[k]) el.setAttribute('data-'+k,tr[k]); } el.textContent=(L()!=='vi'&&tr&&(tr[L()]||tr.en))||vi; return el; }
+  function doiTieng(root){ var l=L(); root.querySelectorAll('[data-vi]').forEach(function(e){ e.textContent=(l!=='vi'&&(e.getAttribute('data-'+l)||e.getAttribute('data-en')))||e.getAttribute('data-vi'); }); }  /* thiếu tiếng đó → tiếng Anh (anh Duy 25/09) */
   function build(data,dong){
     var D={}, TK=null; (dong&&dong.dong||[]).forEach(function(x){ D[x.id]=x; if(x.id==='tach-khoi') TK=x; });
     var root=document.createElement('div');
